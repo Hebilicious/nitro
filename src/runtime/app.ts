@@ -80,12 +80,19 @@ function createNitroApp(): NitroApp {
   const regularHandlers = handlers.filter((h) => !h.formAction);
 
   if (formActionsHandlers.length > 0) {
-    const renderer = handlers.find(({ route }) => route === "/**");
+    const renderer = regularHandlers.find(({ route }) => route === "/**");
+    if (!renderer) {
+      throw new Error(
+        "[Form Actions]: Missing renderer. Please properly set `nitro.options.renderer`."
+      );
+    }
     const rendererHandler = lazyEventHandler(renderer.handler);
 
     for (const h of formActionsHandlers) {
       let handler = h.lazy ? lazyEventHandler(h.handler) : h.handler;
-      const routeRules = getRouteRulesForPath(h.route.replace(/:\w+|\*\*/g, "_"));
+      const routeRules = getRouteRulesForPath(
+        h.route.replace(/:\w+|\*\*/g, "_")
+      );
       if (routeRules.cache) {
         handler = cachedEventHandler(handler, {
           group: "nitro/routes",
