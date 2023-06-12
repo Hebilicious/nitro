@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v0.0.3
+
+[compare changes](https://github.com/Hebilicious/nitro/compare/v0.0.2...v0.0.3)
+
 ## v0.0.2
 
 [compare changes](https://github.com/Hebilicious/nitro/compare/v2.3.4...v0.0.2)
