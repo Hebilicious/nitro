@@ -2,6 +2,49 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v0.0.2
+
+[compare changes](https://github.com/Hebilicious/nitro/compare/v2.3.4...v0.0.2)
+
+
+### 🚀 Enhancements
+
+  - Add `bun` preset ([#1203](https://github.com/Hebilicious/nitro/pull/1203))
+  - Implement fallback handlers ([2fd17ff](https://github.com/Hebilicious/nitro/commit/2fd17ff))
+  - Add form actions to virtual files ([05fb056](https://github.com/Hebilicious/nitro/commit/05fb056))
+  - Remove config options and add form actions router ([661d682](https://github.com/Hebilicious/nitro/commit/661d682))
+  - Add renderer error handling ([05c224a](https://github.com/Hebilicious/nitro/commit/05c224a))
+
+### 🔥 Performance
+
+  - Concurrent file writing for types and compressed assets ([#1135](https://github.com/Hebilicious/nitro/pull/1135))
+
+### 🩹 Fixes
+
+  - **cache:** Mock writable status for cached event handlers ([#1289](https://github.com/Hebilicious/nitro/pull/1289))
+
+### 💅 Refactors
+
+  - Show `/_vfs` structure in nested tree ([#1244](https://github.com/Hebilicious/nitro/pull/1244))
+
+### 📖 Documentation
+
+  - **deploy:** Add deno-deploy docs ([#1193](https://github.com/Hebilicious/nitro/pull/1193))
+  - Update redirect route rule example ([#1278](https://github.com/Hebilicious/nitro/pull/1278))
+
+### ✅ Tests
+
+  - Pass body to vercel-edge test ([2772f58](https://github.com/Hebilicious/nitro/commit/2772f58))
+
+### ❤️  Contributors
+
+- Hebilicious ([@Hebilicious](http://github.com/Hebilicious))
+- Josh Deltener <hecktarzuli@gmail.com>
+- Pooya Parsa <pyapar@gmail.com>
+- Inesh Bose 
+- Markthree ([@markthree](http://github.com/markthree))
+- Eckhardt (Kaizen) Dreyer <eckhardt.dreyer@gmail.com>
+
 ## v2.4.0
 
 [compare changes](https://github.com/unjs/nitro/compare/v2.3.3...v2.4.0)
