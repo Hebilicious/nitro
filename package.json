@@ -1,8 +1,8 @@
 {
-  "name": "nitropack",
-  "version": "2.5.2",
-  "description": "Build and Deploy Universal JavaScript Servers",
-  "repository": "unjs/nitro",
+  "name": "@hebilicious/nitro",
+  "version": "0.0.2",
+  "description": "Fork of UnJS Nitro",
+  "repository": "Hebilicious/nitro",
   "license": "MIT",
   "type": "module",
   "exports": {
