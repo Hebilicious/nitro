@@ -4,9 +4,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## v2.5.2
 
-[compare changes](https://github.com/unjs/nitro/compare/v2.5.1...v2.5.2)
-
-
 ### 🩹 Fixes
 
   - Add `envPrefix` to `runtimeConfig.nitro` types ([#1336](https://github.com/unjs/nitro/pull/1336))
