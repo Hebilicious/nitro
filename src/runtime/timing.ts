@@ -1,4 +1,4 @@
-import { eventHandler } from "h3";
+import { eventHandler, setHeader } from "h3";
 
 import { defineNitroPlugin } from "./plugin";
 
@@ -11,7 +11,10 @@ const globalTiming = globalThis.__timing__ || {
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing
 const timingMiddleware = eventHandler((event) => {
   const start = globalTiming.start();
-
+  // @todo handle for non node
+  if (event.request) {
+    return;
+  }
   const _end = event.node.res.end;
   event.node.res.end = function (
     chunk: any,
@@ -26,7 +29,7 @@ const timingMiddleware = eventHandler((event) => {
       .map((m) => `-;dur=${m[1]};desc="${encodeURIComponent(m[0])}"`)
       .join(", ");
     if (!event.node.res.headersSent) {
-      event.node.res.setHeader("Server-Timing", serverTiming);
+      setHeader(event, "Server-Timing", serverTiming);
     }
     _end.call(event.node.res, chunk, encoding, cb);
     return this;

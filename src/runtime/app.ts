@@ -7,6 +7,7 @@ import {
   Router,
   toNodeListener,
   fetchWithEvent,
+  adapterFetch,
 } from "h3";
 import { createFetch, Headers } from "ofetch";
 import destr from "destr";
@@ -30,6 +31,7 @@ export interface NitroApp {
   hooks: Hookable;
   localCall: ReturnType<typeof createCall>;
   localFetch: ReturnType<typeof createLocalFetch>;
+  localResponse: ReturnType<typeof adapterFetch>;
 }
 
 function createNitroApp(): NitroApp {
@@ -49,7 +51,10 @@ function createNitroApp(): NitroApp {
 
   // Create local fetch callers
   const localCall = createCall(toNodeListener(h3App) as any);
-  const localFetch = createLocalFetch(localCall, globalThis.fetch);
+  // const localFetch = createLocalFetch(localCall, globalThis.fetch);
+  const localResponse = adapterFetch(h3App);
+  const localFetch = (request: Request) => localResponse(request);
+  console.log("CONFIG", config.app.baseURL);
   const $fetch = createFetch({
     fetch: localFetch,
     Headers,
@@ -64,7 +69,8 @@ function createNitroApp(): NitroApp {
       // Init nitro context
       event.context.nitro = event.context.nitro || {};
       // Support platform context provided by local fetch
-      const envContext = (event.node.req as any).__unenv__;
+      // @todo do for non-node
+      const envContext = (event?.node?.req as any)?.__unenv__;
       if (envContext) {
         Object.assign(event.context, envContext);
       }
@@ -136,6 +142,7 @@ function createNitroApp(): NitroApp {
     formActionsRouter,
     localCall,
     localFetch,
+    localResponse,
   };
 
   for (const plugin of plugins) {

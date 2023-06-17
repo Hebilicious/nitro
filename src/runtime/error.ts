@@ -19,7 +19,7 @@ export default <NitroErrorHandler>function (error, event) {
   const showDetails = isDev && statusCode !== 404;
 
   const errorObject = {
-    url: event.node.req.url || "",
+    url: getUrlPath(event) || "",
     statusCode,
     statusMessage,
     message,
@@ -45,11 +45,11 @@ export default <NitroErrorHandler>function (error, event) {
   setResponseStatus(event, statusCode, statusMessage);
 
   if (isJsonRequest(event)) {
-    event.node.res.setHeader("Content-Type", "application/json");
-    event.node.res.end(JSON.stringify(errorObject));
+    setHeader(event, "Content-Type", "application/json");
+    send(event, JSON.stringify(errorObject));
   } else {
-    event.node.res.setHeader("Content-Type", "text/html");
-    event.node.res.end(renderHTMLError(errorObject));
+    setHeader(event, "Content-Type", "text/html");
+    send(event, renderHTMLError(errorObject));
   }
 };
 

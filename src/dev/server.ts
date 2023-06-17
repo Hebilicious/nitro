@@ -235,6 +235,7 @@ export function createDevServer(nitro: Nitro): NitroDevServer {
   };
 }
 
+// @todo rewrite for non-node
 function createProxy(defaults: HTTPProxyOptions = {}) {
   const proxy = httpProxy.createProxy();
   const handle = (event: H3Event, opts: HTTPProxyOptions = {}) => {

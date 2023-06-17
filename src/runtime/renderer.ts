@@ -1,4 +1,13 @@
-import { H3Event, eventHandler, setResponseStatus } from "h3";
+import {
+  H3Event,
+  eventHandler,
+  getResponseStatus,
+  getUrlPath,
+  send,
+  setHeader,
+  setHeaders,
+  setResponseStatus,
+} from "h3";
 import { useNitroApp } from "./app";
 
 export interface RenderResponse {
@@ -15,9 +24,10 @@ export type RenderHandler = (
 export function defineRenderHandler(handler: RenderHandler) {
   return eventHandler(async (event) => {
     // TODO: Use serve-placeholder
-    if (event.node.req.url.endsWith("/favicon.ico")) {
-      event.node.res.setHeader("Content-Type", "image/x-icon");
-      event.node.res.end(
+    if (getUrlPath(event).endsWith("/favicon.ico")) {
+      setHeader(event, "Content-Type", "image/x-icon");
+      send(
+        event,
         "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
       );
       return;
@@ -25,13 +35,14 @@ export function defineRenderHandler(handler: RenderHandler) {
 
     const response = await handler(event);
     if (!response) {
-      if (!event.node.res.writableEnded) {
-        event.node.res.statusCode =
-          event.node.res.statusCode === 200 ? 500 : event.node.res.statusCode;
-        event.node.res.end(
-          "No response returned from render handler: " + event.node.req.url
-        );
-      }
+      setResponseStatus(
+        event,
+        getResponseStatus(event) === 200 ? 500 : getResponseStatus(event)
+      );
+      send(
+        event,
+        "No response returned from render handler: " + getUrlPath(event)
+      );
       return;
     }
 
@@ -44,10 +55,8 @@ export function defineRenderHandler(handler: RenderHandler) {
     // TODO: Caching support
 
     // Send headers
-    if (!event.node.res.headersSent && response.headers) {
-      for (const header in response.headers) {
-        event.node.res.setHeader(header, response.headers[header]);
-      }
+    if (response.headers) {
+      setHeaders(event, response.headers);
       setResponseStatus(event, response.statusCode, response.statusMessage);
     }
 

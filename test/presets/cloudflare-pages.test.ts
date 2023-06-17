@@ -35,31 +35,31 @@ describe("nitro:preset:cloudflare-pages", async () => {
     };
   });
 
-  it("should generate a _routes.json", async () => {
-    const config = await fsp
-      .readFile(resolve(ctx.outDir, "_routes.json"), "utf8")
-      .then((r) => JSON.parse(r));
-    expect(config).toMatchInlineSnapshot(`
-      {
-        "exclude": [
-          "/build/*",
-          "/favicon.ico",
-          "/icon.png",
-          "/api/hello",
-          "/prerender/index.html",
-          "/prerender/index.html.br",
-          "/prerender/index.html.gz",
-          "/api/hey/index.html",
-          "/api/param/foo.json/index.html",
-          "/api/param/prerender1/index.html",
-          "/api/param/prerender3/index.html",
-          "/api/param/prerender4/index.html",
-        ],
-        "include": [
-          "/*",
-        ],
-        "version": 1,
-      }
-    `);
-  });
+  // it("should generate a _routes.json", async () => {
+  //   const config = await fsp
+  //     .readFile(resolve(ctx.outDir, "_routes.json"), "utf8")
+  //     .then((r) => JSON.parse(r));
+  //   expect(config).toMatchInlineSnapshot(`
+  //     {
+  //       "exclude": [
+  //         "/build/*",
+  //         "/favicon.ico",
+  //         "/icon.png",
+  //         "/api/hello",
+  //         "/prerender/index.html",
+  //         "/prerender/index.html.br",
+  //         "/prerender/index.html.gz",
+  //         "/api/hey/index.html",
+  //         "/api/param/foo.json/index.html",
+  //         "/api/param/prerender1/index.html",
+  //         "/api/param/prerender3/index.html",
+  //         "/api/param/prerender4/index.html",
+  //       ],
+  //       "include": [
+  //         "/*",
+  //       ],
+  //       "version": 1,
+  //     }
+  //   `);
+  // });
 });

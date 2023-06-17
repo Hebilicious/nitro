@@ -1,7 +1,9 @@
+import { getHeaders, getMethod, getUrlPath } from "h3";
+
 export default eventHandler((event) => {
   return {
-    url: event.node.req.url,
-    method: event.node.req.method,
-    headers: event.node.req.headers,
+    url: getUrlPath(event),
+    method: getMethod(event),
+    headers: getHeaders(event),
   };
 });

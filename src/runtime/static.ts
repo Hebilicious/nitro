@@ -1,4 +1,14 @@
-import { eventHandler, createError } from "h3";
+import {
+  eventHandler,
+  createError,
+  setResponseStatus,
+  send,
+  setHeader,
+  removeResponseHeader,
+  getMethod,
+  getUrlPath,
+  getHeader,
+} from "h3";
 import { joinURL, withoutTrailingSlash, withLeadingSlash, parseURL } from "ufo";
 import {
   getAsset,
@@ -11,20 +21,16 @@ const METHODS = new Set(["HEAD", "GET"]);
 const EncodingMap = { gzip: ".gz", br: ".br" };
 
 export default eventHandler((event) => {
-  if (event.node.req.method && !METHODS.has(event.node.req.method)) {
+  if (getMethod(event) && !METHODS.has(getMethod(event))) {
     return;
   }
 
   let id = decodeURIComponent(
-    withLeadingSlash(
-      withoutTrailingSlash(parseURL(event.node.req.url).pathname)
-    )
+    withLeadingSlash(withoutTrailingSlash(parseURL(getUrlPath(event)).pathname))
   );
   let asset;
 
-  const encodingHeader = String(
-    event.node.req.headers["accept-encoding"] || ""
-  );
+  const encodingHeader = String(getHeader(event, "accept-encoding") || "");
   const encodings = [
     ...encodingHeader
       .split(",")
@@ -34,7 +40,7 @@ export default eventHandler((event) => {
     "",
   ];
   if (encodings.length > 1) {
-    event.node.res.setHeader("Vary", "Accept-Encoding");
+    setHeader(event, "Vary", "Accept-Encoding");
   }
 
   for (const encoding of encodings) {
@@ -50,7 +56,7 @@ export default eventHandler((event) => {
 
   if (!asset) {
     if (isPublicAssetURL(id)) {
-      event.node.res.removeHeader("cache-control");
+      removeResponseHeader(event, "cache-control");
       throw createError({
         statusMessage: "Cannot find static asset " + id,
         statusCode: 404,
@@ -59,43 +65,43 @@ export default eventHandler((event) => {
     return;
   }
 
-  const ifNotMatch = event.node.req.headers["if-none-match"] === asset.etag;
+  const ifNotMatch = getHeader(event, "if-none-match") === asset.etag;
   if (ifNotMatch) {
-    event.node.res.statusCode = 304;
-    event.node.res.end();
+    setResponseStatus(event, 304);
+    send(event);
     return;
   }
 
-  const ifModifiedSinceH = event.node.req.headers["if-modified-since"];
+  const ifModifiedSinceH = getHeader(event, "if-modified-since");
   const mtimeDate = new Date(asset.mtime);
   if (
     ifModifiedSinceH &&
     asset.mtime &&
     new Date(ifModifiedSinceH) >= mtimeDate
   ) {
-    event.node.res.statusCode = 304;
-    event.node.res.end();
+    setResponseStatus(event, 304);
+    send(event);
     return;
   }
 
-  if (asset.type && !event.node.res.getHeader("Content-Type")) {
-    event.node.res.setHeader("Content-Type", asset.type);
+  if (asset.type && !getHeader(event, "Content-Type")) {
+    setHeader(event, "Content-Type", asset.type);
   }
 
-  if (asset.etag && !event.node.res.getHeader("ETag")) {
-    event.node.res.setHeader("ETag", asset.etag);
+  if (asset.etag && !getHeader(event, "ETag")) {
+    setHeader(event, "ETag", asset.etag);
   }
 
-  if (asset.mtime && !event.node.res.getHeader("Last-Modified")) {
-    event.node.res.setHeader("Last-Modified", mtimeDate.toUTCString());
+  if (asset.mtime && !getHeader(event, "Last-Modified")) {
+    setHeader(event, "Last-Modified", mtimeDate.toUTCString());
   }
 
-  if (asset.encoding && !event.node.res.getHeader("Content-Encoding")) {
-    event.node.res.setHeader("Content-Encoding", asset.encoding);
+  if (asset.encoding && !getHeader(event, "Content-Encoding")) {
+    setHeader(event, "Content-Encoding", asset.encoding);
   }
 
-  if (asset.size > 0 && !event.node.res.getHeader("Content-Length")) {
-    event.node.res.setHeader("Content-Length", asset.size);
+  if (asset.size > 0 && !getHeader(event, "Content-Length")) {
+    setHeader(event, "Content-Length", asset.size);
   }
 
   return readAsset(id);

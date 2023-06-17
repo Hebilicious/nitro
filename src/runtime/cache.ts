@@ -4,8 +4,14 @@ import {
   defineEventHandler,
   createEvent,
   EventHandler,
+  getUrlPath,
+  setResponseStatus,
+  setHeaders,
+  getResponseStatus,
+  getResponseHeaders,
+  H3Event,
+  getOriginalUrlPath,
 } from "h3";
-import type { H3Event } from "h3";
 import { parseURL } from "ufo";
 import { useStorage } from "./storage";
 
@@ -181,7 +187,7 @@ export function defineCachedEventHandler<T = any>(
       if (key) {
         return escapeKey(key);
       }
-      const url = event.node.req.originalUrl || event.node.req.url;
+      const url = getOriginalUrlPath(event) || getUrlPath(event);
       const friendlyName = escapeKey(decodeURI(parseURL(url).pathname)).slice(
         0,
         16
@@ -205,10 +211,13 @@ export function defineCachedEventHandler<T = any>(
   const _cachedHandler = cachedFunction<ResponseCacheEntry<T>>(
     async (incomingEvent: H3Event) => {
       // Create proxies to avoid sharing state with user request
-      const reqProxy = cloneWithProxy(incomingEvent.node.req, { headers: {} });
+      // @todo Handle for non node
+      const reqProxy = cloneWithProxy(incomingEvent?.node?.req, {
+        headers: {},
+      });
       const resHeaders: Record<string, number | string | string[]> = {};
       let _resSendBody;
-      const resProxy = cloneWithProxy(incomingEvent.node.res, {
+      const resProxy = cloneWithProxy(incomingEvent?.node?.res, {
         statusCode: 200,
         writableEnded: false,
         writableFinished: false,
@@ -261,7 +270,7 @@ export function defineCachedEventHandler<T = any>(
           this.statusCode = statusCode;
           if (headers) {
             for (const header in headers) {
-              this.setHeader(header, headers[header]);
+              this.setHeader(event, header, headers[header]);
             }
           }
           return this;
@@ -274,7 +283,7 @@ export function defineCachedEventHandler<T = any>(
       const body = (await handler(event)) || _resSendBody;
 
       // Collect cachable headers
-      const headers = event.node.res.getHeaders();
+      const headers = getResponseHeaders(event);
       headers.etag = headers.Etag || headers.etag || `W/"${hash(body)}"`;
       headers["last-modified"] =
         headers["Last-Modified"] ||
@@ -299,7 +308,7 @@ export function defineCachedEventHandler<T = any>(
 
       // Create cache entry for response
       const cacheEntry: ResponseCacheEntry<T> = {
-        code: event.node.res.statusCode,
+        code: getResponseStatus(event),
         headers,
         body,
       };
@@ -309,7 +318,7 @@ export function defineCachedEventHandler<T = any>(
     _opts
   );
 
-  return defineEventHandler<T>(async (event) => {
+  return defineEventHandler(async (event) => {
     // Headers-only mode
     if (opts.headersOnly) {
       // TODO: Send SWR too
@@ -323,7 +332,8 @@ export function defineCachedEventHandler<T = any>(
     const response = await _cachedHandler(event);
 
     // Don't continue if response is already handled by user
-    if (event.node.res.headersSent || event.node.res.writableEnded) {
+    // @todo handle for non node
+    if (event?.node?.res?.headersSent || event?.node?.res?.writableEnded) {
       return response.body;
     }
 
@@ -339,14 +349,12 @@ export function defineCachedEventHandler<T = any>(
     }
 
     // Send status and headers
-    event.node.res.statusCode = response.code;
-    for (const name in response.headers) {
-      event.node.res.setHeader(name, response.headers[name]);
-    }
+    setResponseStatus(event, response.code);
+    setHeaders(event, response.headers);
 
     // Send body
     return response.body;
-  });
+  }) as any;
 }
 
 function cloneWithProxy<T extends object = any>(

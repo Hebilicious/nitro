@@ -7,7 +7,7 @@ import type { Nitro } from "../types";
 
 export const cloudflarePages = defineNitroPreset({
   extends: "cloudflare",
-  entry: "#internal/nitro/entries/cloudflare-pages",
+  entry: "#internal/nitro/entries/cloudflare-pages-v2",
   commands: {
     preview: "npx wrangler pages dev ./",
     deploy: "npx wrangler pages publish ./",
