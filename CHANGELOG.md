@@ -2,6 +2,119 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v0.0.4
+
+[compare changes](https://github.com/Hebilicious/nitro/compare/v2.3.4...v0.0.4)
+
+
+### 🚀 Enhancements
+
+  - Add `bun` preset ([#1203](https://github.com/Hebilicious/nitro/pull/1203))
+  - Allow customising generated tsConfig ([#1266](https://github.com/Hebilicious/nitro/pull/1266))
+  - Type `useRuntimeConfig` with `NitroRuntimeConfig` ([#1311](https://github.com/Hebilicious/nitro/pull/1311))
+  - Type nitro app runtime hooks ([#1316](https://github.com/Hebilicious/nitro/pull/1316))
+  - Add `cloudflare-pages-static` preset ([#1310](https://github.com/Hebilicious/nitro/pull/1310))
+  - Add experimental `deno-server` preset ([#592](https://github.com/Hebilicious/nitro/pull/592))
+  - Add `flightcontrol` preset ([#970](https://github.com/Hebilicious/nitro/pull/970), [#1250](https://github.com/Hebilicious/nitro/pull/1250))
+  - Support `jsx` and `tsx` out of the box ([#1303](https://github.com/Hebilicious/nitro/pull/1303))
+  - Add support for `failOnError` ([#1294](https://github.com/Hebilicious/nitro/pull/1294))
+  - UseStorage generic support ([#1279](https://github.com/Hebilicious/nitro/pull/1279))
+  - Provide static `process.*` and `import.meta.*` build flags ([#1331](https://github.com/Hebilicious/nitro/pull/1331))
+  - Implement fallback handlers ([6cc9e87](https://github.com/Hebilicious/nitro/commit/6cc9e87))
+  - Add form actions to virtual files ([a4faecf](https://github.com/Hebilicious/nitro/commit/a4faecf))
+  - Remove config options and add form actions router ([0b54379](https://github.com/Hebilicious/nitro/commit/0b54379))
+  - Add renderer error handling ([248f610](https://github.com/Hebilicious/nitro/commit/248f610))
+
+### 🔥 Performance
+
+  - Concurrent file writing for types and compressed assets ([#1135](https://github.com/Hebilicious/nitro/pull/1135))
+
+### 🩹 Fixes
+
+  - **cache:** Mock writable status for cached event handlers ([#1289](https://github.com/Hebilicious/nitro/pull/1289))
+  - **bun:** Resolve internal dependencies with `bun` export condition ([#1313](https://github.com/Hebilicious/nitro/pull/1313))
+  - **deno:** Support environment variables ([88b4e11](https://github.com/Hebilicious/nitro/commit/88b4e11))
+  - Respect `static` flag when auto detecting preset ([#1321](https://github.com/Hebilicious/nitro/pull/1321))
+  - **prerenderer:** Don't inherit `static` config ([#1324](https://github.com/Hebilicious/nitro/pull/1324))
+  - **vercel:** Add check for index route rule ([#1290](https://github.com/Hebilicious/nitro/pull/1290))
+  - Use `event.handled` guard before sending direct reponses ([#1326](https://github.com/Hebilicious/nitro/pull/1326))
+  - Import `NitroRuntimeHooks` from runtime dir ([#1328](https://github.com/Hebilicious/nitro/pull/1328))
+  - Generate types for `#imports` ([#1329](https://github.com/Hebilicious/nitro/pull/1329))
+  - Add `envPrefix` to `runtimeConfig.nitro` types ([#1336](https://github.com/Hebilicious/nitro/pull/1336))
+  - **prerender:** Allow to fetch static files ([#1340](https://github.com/Hebilicious/nitro/pull/1340))
+  - **options:** Default target to `static` when `static` override is set ([#1342](https://github.com/Hebilicious/nitro/pull/1342))
+  - Correct default `node-server`  target ([7976318](https://github.com/Hebilicious/nitro/commit/7976318))
+  - **vercel, netlify:** Always check `nativeSWR` future flag ([ccebe4e](https://github.com/Hebilicious/nitro/commit/ccebe4e))
+  - **vercel, netlify:** Handle boolean values for route rule deprecation ([dfd8bbd](https://github.com/Hebilicious/nitro/commit/dfd8bbd))
+  - Dedup `unstorage` dependency and use subpath alias ([#1164](https://github.com/Hebilicious/nitro/pull/1164))
+  - **dev:** Ensure socket path is accessable ([#1115](https://github.com/Hebilicious/nitro/pull/1115))
+  - Type `event.$fetch` and `event.fetch` ([#1343](https://github.com/Hebilicious/nitro/pull/1343))
+  - Allow configuring esbuild transform plugin ([#1347](https://github.com/Hebilicious/nitro/pull/1347))
+
+### 💅 Refactors
+
+  - Show `/_vfs` structure in nested tree ([#1244](https://github.com/Hebilicious/nitro/pull/1244))
+
+### 📖 Documentation
+
+  - **deploy:** Add deno-deploy docs ([#1193](https://github.com/Hebilicious/nitro/pull/1193))
+  - Update redirect route rule example ([#1278](https://github.com/Hebilicious/nitro/pull/1278))
+  - Update docus version ([848c86a](https://github.com/Hebilicious/nitro/commit/848c86a))
+  - Update cloudflare-pages preset ([#1304](https://github.com/Hebilicious/nitro/pull/1304))
+  - Add an example for `devHandlers` config ([#1295](https://github.com/Hebilicious/nitro/pull/1295))
+  - Fix typo in Flightcontrol deployment option ([#1332](https://github.com/Hebilicious/nitro/pull/1332))
+  - Add reference to install azure functions core tools to the swa section ([#1339](https://github.com/Hebilicious/nitro/pull/1339))
+
+### 📦 Build
+
+  - Avoid doubly-bundling runtime types ([#1334](https://github.com/Hebilicious/nitro/pull/1334))
+
+### 🌊 Types
+
+  - Support type generic for `useRuntimeConfig` ([#1284](https://github.com/Hebilicious/nitro/pull/1284))
+  - Avoid overriding app runtime config namespace ([#1333](https://github.com/Hebilicious/nitro/pull/1333))
+
+### 🏡 Chore
+
+  - Update dependencies ([db93afa](https://github.com/Hebilicious/nitro/commit/db93afa))
+  - Apply new lint rules ([879a7c3](https://github.com/Hebilicious/nitro/commit/879a7c3))
+  - Update all non major dependencies ([9bb674f](https://github.com/Hebilicious/nitro/commit/9bb674f))
+  - Update dependencies ([46e6f10](https://github.com/Hebilicious/nitro/commit/46e6f10))
+  - Update unstorage ([bac3b0d](https://github.com/Hebilicious/nitro/commit/bac3b0d))
+  - **release:** V2.5.0 ([606fc1c](https://github.com/Hebilicious/nitro/commit/606fc1c))
+  - **release:** V2.5.1 ([21a2595](https://github.com/Hebilicious/nitro/commit/21a2595))
+  - Add `.data` to gitignore ([cff7bf0](https://github.com/Hebilicious/nitro/commit/cff7bf0))
+  - Update deps and lockfile ([373f34c](https://github.com/Hebilicious/nitro/commit/373f34c))
+  - Update unimport ([ef7eaf2](https://github.com/Hebilicious/nitro/commit/ef7eaf2))
+  - **release:** V2.5.2 ([b8b6def](https://github.com/Hebilicious/nitro/commit/b8b6def))
+  - **release:** V0.0.2 ([f4c0421](https://github.com/Hebilicious/nitro/commit/f4c0421))
+  - **release:** V0.0.3 ([029a136](https://github.com/Hebilicious/nitro/commit/029a136))
+
+### ✅ Tests
+
+  - Pass body to vercel-edge test ([f9a9862](https://github.com/Hebilicious/nitro/commit/f9a9862))
+
+### ❤️  Contributors
+
+- Hebilicious ([@Hebilicious](http://github.com/Hebilicious))
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Daniel Roe <daniel@roe.dev>
+- Stefan Bittmann <stefan@clinic.tools>
+- Nick Dawson 
+- ModupeD 
+- 魔王少年 ([@maou-shonen](http://github.com/maou-shonen))
+- Andrew <mshote@gmail.com>
+- Estéban ([@Barbapapazes](http://github.com/Barbapapazes))
+- Dunqing ([@Dunqing](http://github.com/Dunqing))
+- Frantz Kati <bahdcoder@gmail.com>
+- Mike Laumann Bellika 
+- Sébastien Chopin ([@Atinux](http://github.com/Atinux))
+- Josh Deltener <hecktarzuli@gmail.com>
+- Michael J. Roberts 
+- Inesh Bose 
+- Markthree ([@markthree](http://github.com/markthree))
+- Eckhardt (Kaizen) Dreyer <eckhardt.dreyer@gmail.com>
+
 ## v2.5.2
 
 ### 🩹 Fixes
